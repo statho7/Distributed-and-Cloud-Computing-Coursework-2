@@ -21,19 +21,12 @@ class library(object):
 
     def return_users(self):
         return self.users
-        # message = [user for user in Users.list_of_users()] if len(
-        #     Users.list_of_users()) > 0 else 'No users'
-        # return message
 
     def add_author(self, author_name, author_genre):
         self.authors.append((author_name, author_genre))
-        # print(self.authors)
 
     def return_authors(self):
         return self.authors
-        # message = [author for author in Authors.list_of_authors()] if len(
-        #     Authors.list_of_authors()) > 0 else 'No authors'
-        # return message
 
     def add_book_copy(self, author_name, book_title):
         self.books.append((author_name, book_title, False))
@@ -66,8 +59,6 @@ class library(object):
                 (author[0], book_title))
             self.history_of_loans.append(
                 (user_name, book_title, year, month, day, 'Loan'))
-            # print('loaned')
-            # print(self.current_loans)
             return 1
         else:
             return 0
@@ -93,7 +84,6 @@ class library(object):
                 (author[0], book_title))
             self.history_of_loans.append(
                 (user_name, book_title, year, month, day, 'Returned'))
-            # print('returned')
             print('return_book')
             print(self.books_not_on_loan)
             print(len(self.books_not_on_loan))
@@ -121,19 +111,12 @@ class library(object):
 
     def user_loans_date(self, user_name, start_year, start_month, start_day, end_year, end_month, end_day):
         loans_of_user = []
-        # print(self.history_of_loans)
         for loan in self.history_of_loans:
-            # print(loan)
             if loan[0] == user_name and loan[5] == 'Loan' and (loan[2] > start_year or (loan[2] == start_year and (loan[3] > start_month or (loan[3] == start_month and loan[4] > start_day)))):
                 for second_loan in self.history_of_loans:
-                    # print(second_loan)
                     if second_loan[0] == user_name and second_loan[1] == loan[1] and second_loan[5] == 'Returned' and (second_loan[2] < end_year or (second_loan[2] == end_year and (second_loan[3] < end_month or (second_loan[3] == end_month and second_loan[4] < end_day)))):
                         loans_of_user.append(loan)
                         loans_of_user.append(second_loan)
-            # elif loan[0] == user_name and loan[5] == 'Returned':
-            #     for second_loan in self.history_of_loans:
-            #         if second_loan[0] == user_name and second_loan[1] == loan[1] and second_loan[5] == 'Loan':
-            #             pass
         return loans_of_user if len(loans_of_user) > 0 else 'No loans between these dates'
 
 
