@@ -1,7 +1,7 @@
 from Pyro5.api import expose, behavior, serve, Daemon
-# from book import Books
-# from author import Authors
-# from user import Users
+from book import Book
+from author import Author
+from user import User
 
 
 @expose
@@ -17,37 +17,29 @@ class library(object):
         self.history_of_loans = []
 
     def add_user(self, user_name):
-        self.users.append(user_name)
+        user = User(user_name)
+        self.users.append(user.user_name)
 
     def return_users(self):
         return self.users
 
     def add_author(self, author_name, author_genre):
-        self.authors.append((author_name, author_genre))
+        author = Author(author_name, author_genre)
+        self.authors.append((author.author_name,author.author_genre))
 
     def return_authors(self):
         return self.authors
 
     def add_book_copy(self, author_name, book_title):
         self.books.append((author_name, book_title, False))
-        # Books.add_book(author_name, book_title)
         self.books_not_on_loan.append((author_name, book_title))
-        print('add_book_copy')
-        print(self.books_not_on_loan)
-        print(len(self.books_not_on_loan))
 
     def return_books_not_loan(self):
-        print('return_books_not_loan')
-        print(self.books_not_on_loan)
-        print(len(self.books_not_on_loan))
         message = [book for book in self.books_not_on_loan] if len(
             self.books_not_on_loan) > 0 else 'All books are loaned'
         return message
 
     def loan_book(self, user_name, book_title, year, month, day):
-        print('loan_book')
-        print(self.books_not_on_loan)
-        print(len(self.books_not_on_loan))
         author = [book[0] for book in self.books if book[1] == book_title]
         if (author[0], book_title) not in self.current_loans:
             self.books_on_loan.append(
@@ -66,13 +58,9 @@ class library(object):
     def return_books_loan(self):
         message = [book for book in self.books_on_loan] if len(
             self.books_on_loan) > 0 else 'No books are loaned'
-        print('return_books_loan')
-        print(self.books_not_on_loan)
-        print(len(self.books_not_on_loan))
         return message
 
     def return_book(self, user_name, book_title, year, month, day):
-        # print(self.current_loans)
         author = [book[0] for book in self.books if book[1] == book_title]
         if (author[0], book_title) in self.current_loans:
             self.books_not_on_loan.append(
@@ -84,14 +72,8 @@ class library(object):
                 (author[0], book_title))
             self.history_of_loans.append(
                 (user_name, book_title, year, month, day, 'Returned'))
-            print('return_book')
-            print(self.books_not_on_loan)
-            print(len(self.books_not_on_loan))
             return 1
         else:
-            print('return_book')
-            print(self.books_not_on_loan)
-            print(len(self.books_not_on_loan))
             return 0
 
     def delete_book(self, book_title):
