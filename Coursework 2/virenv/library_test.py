@@ -87,13 +87,13 @@ print('\ndelete_book\n')
 library.delete_book("Odisia")
 
 print('\nuser_loans_date\n')
-print(library.user_loans_date("Andreas", 2010, 1, 1, 2029, 2, 1))
+print(library.user_loans_date("Andreas", 2025, 1, 1, 2029, 2, 1))
 
 print('\nreturn_book\n')
 print(library.return_book("Nikos", "Aeriko", 2022, 1, 3))
 
 print('\nuser_loans_date\n')
-print(library.user_loans_date("Dimitris", 2010, 1, 1, 2029, 2, 1))
+print(library.user_loans_date("Dimitris", 2025, 1, 1, 2029, 2, 1))
 
 print('\nuser_loans_date\n')
 print(library.user_loans_date("Nikos", 2010, 1, 1, 2029, 2, 1))

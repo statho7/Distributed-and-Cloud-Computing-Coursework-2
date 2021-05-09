@@ -48,6 +48,7 @@ class library(object):
         if len(author) == 0:
             return f'No book with title "{book_title}" in the database'
         book = Book(author[0], book_title)
+        user = User(user_name)
         if (book.author_name, book.book_title) in self.books_not_on_loan:
             self.books_on_loan.append(
                 (book.author_name, book.book_title))
@@ -56,9 +57,9 @@ class library(object):
             self.books_not_on_loan.remove(
                 (book.author_name, book.book_title))
             self.current_loans.append(
-                (book.author_name, book.book_title))
+                (user.user_name, book.author_name, book.book_title))
             self.history_of_loans.append(
-                (user_name, book.book_title, year, month, day, 'Loan'))
+                (user.user_name, book.book_title, year, month, day, 'Loan'))
             return 1
         else:
             return 0
@@ -73,7 +74,8 @@ class library(object):
         if len(author) == 0:
             return f'No book with title "{book_title}" in the database'
         book = Book(author[0], book_title)
-        if (book.author_name, book.book_title) in self.current_loans:
+        user = User(user_name)
+        if (book.author_name, book.book_title) in self.books_on_loan:
             self.books_not_on_loan.append(
                 (book.author_name, book.book_title))
             self.books[self.books.index((author[0], book_title, True))] = (
@@ -81,9 +83,9 @@ class library(object):
             self.books_on_loan.remove(
                 (book.author_name, book.book_title))
             self.current_loans.remove(
-                (book.author_name, book.book_title))
+                (user.user_name, book.author_name, book.book_title))
             self.history_of_loans.append(
-                (user_name, book.book_title, year, month, day, 'Returned'))
+                (user.user_name, book.book_title, year, month, day, 'Returned'))
             return 1
         else:
             return 0
@@ -120,7 +122,7 @@ class library(object):
                     if second_loan[0] == user_name and second_loan[1] == loan[1] and second_loan[5] == 'Returned' and (second_loan[2] < end_year or (second_loan[2] == end_year and (second_loan[3] < end_month or (second_loan[3] == end_month and second_loan[4] < end_day)))):
                         loans_of_user.append(loan)
                         loans_of_user.append(second_loan)
-        return loans_of_user if len(loans_of_user) > 0 else 'No loans between these dates'
+        return loans_of_user if len(loans_of_user) > 0 else f'No loans between these dates for user: "{user_name}"'
 
 
 daemon = Daemon()
