@@ -45,8 +45,10 @@ class library(object):
 
     def loan_book(self, user_name, book_title, year, month, day):
         author = [book[0] for book in self.books if book[1] == book_title]
+        if len(author) == 0:
+            return f'No book with title "{book_title}" in the database'
         book = Book(author[0], book_title)
-        if (book.author_name, book.book_title) not in self.current_loans:
+        if (book.author_name, book.book_title) in self.books_not_on_loan:
             self.books_on_loan.append(
                 (book.author_name, book.book_title))
             self.books[self.books.index((author[0], book_title, False))] = (
@@ -68,6 +70,8 @@ class library(object):
 
     def return_book(self, user_name, book_title, year, month, day):
         author = [book[0] for book in self.books if book[1] == book_title]
+        if len(author) == 0:
+            return f'No book with title "{book_title}" in the database'
         book = Book(author[0], book_title)
         if (book.author_name, book.book_title) in self.current_loans:
             self.books_not_on_loan.append(
@@ -86,6 +90,8 @@ class library(object):
 
     def delete_book(self, book_title):
         author = [book[0] for book in self.books if book[1] == book_title]
+        if len(author) == 0:
+            return f'No book with title "{book_title}" in the database'
         book = Book(author[0], book_title)
         if (book.author_name, book.book_title) in self.books_not_on_loan:
             self.books_not_on_loan.remove(
@@ -94,6 +100,8 @@ class library(object):
                 (author[0], book.book_title, False))
 
     def delete_user(self, user_name):
+        if user_name not in self.users:
+            return f'No user with name "{user_name}" in the database'
         current_loans = [
             loan for loan in self.current_loans if loan[0] == user_name]
         history_of_loans = [
@@ -103,6 +111,8 @@ class library(object):
             self.users.remove(user_name)
 
     def user_loans_date(self, user_name, start_year, start_month, start_day, end_year, end_month, end_day):
+        if user_name not in self.users:
+            return f'No user with name "{user_name}" in the database'
         loans_of_user = []
         for loan in self.history_of_loans:
             if loan[0] == user_name and loan[5] == 'Loan' and (loan[2] > start_year or (loan[2] == start_year and (loan[3] > start_month or (loan[3] == start_month and loan[4] > start_day)))):
