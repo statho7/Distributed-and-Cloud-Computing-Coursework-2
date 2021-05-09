@@ -25,14 +25,18 @@ class library(object):
 
     def add_author(self, author_name, author_genre):
         author = Author(author_name, author_genre)
-        self.authors.append((author.author_name,author.author_genre))
+        self.authors.append(
+            (author.author_name, author.author_genre))
 
     def return_authors(self):
         return self.authors
 
     def add_book_copy(self, author_name, book_title):
-        self.books.append((author_name, book_title, False))
-        self.books_not_on_loan.append((author_name, book_title))
+        book = Book(author_name, book_title)
+        self.books.append(
+            (book.author_name, book.book_title, False))
+        self.books_not_on_loan.append(
+            (book.author_name, book.book_title))
 
     def return_books_not_loan(self):
         message = [book for book in self.books_not_on_loan] if len(
@@ -41,16 +45,18 @@ class library(object):
 
     def loan_book(self, user_name, book_title, year, month, day):
         author = [book[0] for book in self.books if book[1] == book_title]
-        if (author[0], book_title) not in self.current_loans:
+        book = Book(author[0], book_title)
+        if (book.author_name, book.book_title) not in self.current_loans:
             self.books_on_loan.append(
-                (author[0], book_title))
+                (book.author_name, book.book_title))
             self.books[self.books.index((author[0], book_title, False))] = (
-                author[0], book_title, True)
-            self.books_not_on_loan.remove((author[0], book_title))
+                author[0], book.book_title, True)
+            self.books_not_on_loan.remove(
+                (book.author_name, book.book_title))
             self.current_loans.append(
-                (author[0], book_title))
+                (book.author_name, book.book_title))
             self.history_of_loans.append(
-                (user_name, book_title, year, month, day, 'Loan'))
+                (user_name, book.book_title, year, month, day, 'Loan'))
             return 1
         else:
             return 0
@@ -62,25 +68,30 @@ class library(object):
 
     def return_book(self, user_name, book_title, year, month, day):
         author = [book[0] for book in self.books if book[1] == book_title]
-        if (author[0], book_title) in self.current_loans:
+        book = Book(author[0], book_title)
+        if (book.author_name, book.book_title) in self.current_loans:
             self.books_not_on_loan.append(
-                (author[0], book_title))
+                (book.author_name, book.book_title))
             self.books[self.books.index((author[0], book_title, True))] = (
-                author[0], book_title, False)
-            self.books_on_loan.remove((author[0], book_title))
+                author[0], book.book_title, False)
+            self.books_on_loan.remove(
+                (book.author_name, book.book_title))
             self.current_loans.remove(
-                (author[0], book_title))
+                (book.author_name, book.book_title))
             self.history_of_loans.append(
-                (user_name, book_title, year, month, day, 'Returned'))
+                (user_name, book.book_title, year, month, day, 'Returned'))
             return 1
         else:
             return 0
 
     def delete_book(self, book_title):
         author = [book[0] for book in self.books if book[1] == book_title]
-        if (author[0], book_title) in self.books_not_on_loan:
-            self.books_not_on_loan.remove((author[0], book_title))
-            self.books.remove((author[0], book_title, False))
+        book = Book(author[0], book_title)
+        if (book.author_name, book.book_title) in self.books_not_on_loan:
+            self.books_not_on_loan.remove(
+                (book.author_name, book.book_title))
+            self.books.remove(
+                (author[0], book.book_title, False))
 
     def delete_user(self, user_name):
         current_loans = [
